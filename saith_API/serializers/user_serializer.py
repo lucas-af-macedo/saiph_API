@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from ..models import Users
 
 class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -6,3 +7,8 @@ class UserSerializer(serializers.Serializer):
 
     class Meta:
         fields = ['email', 'password']
+
+class UserOnlyIdAndName(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        exclude = ('password', 'created_at', 'updated_at', 'email')
