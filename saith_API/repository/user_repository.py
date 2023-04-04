@@ -10,3 +10,7 @@ def insert_token(user_id, token):
 
     return session
 
+def insert_user(name, email, password):
+    Users.objects.create(name=name, email=email, password=password)
+
+    return None

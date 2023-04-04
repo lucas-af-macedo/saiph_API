@@ -1,7 +1,8 @@
 from django.http import JsonResponse, HttpResponse
 from rest_framework.views import APIView
-from ..middleware.user import UserMiddleware
+from ..middleware.user import UserMiddleware, SignUpMiddleware
 from ..services import user_service
+from rest_framework.parsers import JSONParser
 
 class sign_in(APIView):
     @UserMiddleware
@@ -14,16 +15,25 @@ class sign_in(APIView):
         except ValueError as err:
             return HttpResponse(status=500)
 
-def dicionario(lista):
-    type_list = str(type(lista))
-    object_list = {}
-    if ('prisma.models' in type_list):
-        for i in lista:
-            if (type(i[1]) is list):
-                sub_list = []
-                for i2 in i[1]:
-                    sub_list.append(dicionario(i2))
-                object_list[i[0]] = sub_list
-            else:
-                object_list[i[0]] = i[1]
-    return object_list
+
+class sign_up(APIView):
+    @SignUpMiddleware
+    def post(request):
+        data_user = request.data_user
+        try:
+            user = user_service.sign_up(data_user)
+            
+            return HttpResponse(status=201)
+        except ValueError as err:
+            return HttpResponse(status=500)
+        
+class teste(APIView):
+    def post(self, request):
+        uploaded_file = request.FILES['file']
+        password = request.POST.get('password')
+        try:
+            user = user_service.teste(uploaded_file, password)
+            
+            return HttpResponse(status=201)
+        except ValueError as err:
+            return HttpResponse(status=500)
