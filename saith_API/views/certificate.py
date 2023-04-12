@@ -4,7 +4,7 @@ from ..services import certificate_service
 
 class insert_certificate(APIView):
     def post(self, request):
-        uploaded_file = request.FILES['file']
+        uploaded_file = request.FILES['file'].read()
         password = request.POST.get('password')
         try:
             user = certificate_service.insert_certificate(uploaded_file, password)

@@ -1,6 +1,7 @@
 from ..repository import certificate_repository, document_repository
 from datetime import datetime, timezone
 import OpenSSL.crypto
+import base64
 
 def insert_certificate(certificate, password, user_id=1):
     cert = get_certificate_data_or_fail(certificate, password)
@@ -20,7 +21,7 @@ def insert_certificate(certificate, password, user_id=1):
         raise ValueError('Certificate already registred for this user!')
 
     if (not len(certificate_result)):
-        certificate_id = certificate_repository.insert_certificate(certificate=certificate.read(), password=password, expiration=expiration, document_id=document_id, code=code)
+        certificate_id = certificate_repository.insert_certificate(certificate=certificate, password=password, expiration=expiration, document_id=document_id, code=code)
     else:
         certificate_id = certificate_result[0].id    
 
@@ -39,7 +40,7 @@ def insert_certificate(certificate, password, user_id=1):
 
 def get_certificate_data_or_fail(certificate, password):
     try:
-        pfx = OpenSSL.crypto.load_pkcs12(certificate.read(), password)
+        pfx = OpenSSL.crypto.load_pkcs12(certificate, password)
     except:
         raise ValueError('The password of certificate dont match')
     

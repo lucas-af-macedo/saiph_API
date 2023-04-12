@@ -64,7 +64,8 @@ class User_Document_Valid(models.Model):
 class NFE(models.Model):
     id = models.AutoField(primary_key=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
-    ncu = models.CharField(max_length=254, blank=False, null=False)
+    nsu = models.CharField(max_length=254, blank=False, null=False)
+    document_seller = models.CharField(max_length=14, blank=False, null=False)
     seller = models.CharField(max_length=254, blank=False, null=False)
     number = models.CharField(max_length=254, blank=False, null=False)
     value_nfe = models.FloatField(null=False)
@@ -72,6 +73,7 @@ class NFE(models.Model):
     has_nfe_complete = models.BooleanField(default=False)
     nfe = models.BinaryField()
     answered = models.BooleanField(default=False)
+    operation_science = models.BooleanField(default=False)
     answer = models.CharField(max_length=254)
     class Meta:
         default_related_name = 'nfe'
