@@ -19,8 +19,9 @@ def get_response_data(root):
             date_emit = element_root.find(".//{http://www.portalfiscal.inf.br/nfe}dhEmi").text
             list_data.append({'NSU': attributes[0][1], 'nfe_number': nfe_number, 'CNPJ': cnpj,'name': name, 'value_nfe': value_nfe, 'date_emit': date_emit, 'resume_nfe': True, 'xml': xml.decode('utf-8')})
     ult_nsu = root.find(".//{http://www.portalfiscal.inf.br/nfe}ultNSU")
+    max_nsu = root.find(".//{http://www.portalfiscal.inf.br/nfe}maxNSU")
     if ult_nsu == None:
         response_data = {}
     else:
-        response_data = {'ultNSU': ult_nsu.text, 'list_nfe': list_data}
+        response_data = {'ult_NSU': ult_nsu.text, 'max_NSU': max_nsu.text, 'list_nfe': list_data}
     return response_data

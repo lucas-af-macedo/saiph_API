@@ -20,7 +20,7 @@ def test(oi):
     #response_data = soap_request.post_recepcao_evento(certificate, type_event, key_nfe, lote, document_number, state_number, justification)
     response_data = soap_request.post_distribuicao_dfe(certificate, key_nfe, document_number, state_number, 'chave_nfe')
     #response_data = teste.test()
-    print(response_data)
+    #print(response_data)
     print('ok')
 
     #280: "Rejeição: Certificado Transmissor inválido"

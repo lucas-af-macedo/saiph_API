@@ -1,9 +1,12 @@
 from django.http import JsonResponse, HttpResponse
 from rest_framework.views import APIView
 from ..services import test_service
+from ..middleware.authorization import AuthoizationMiddleware
+
 
 class test(APIView):
-    def post(self, request):
+    @AuthoizationMiddleware
+    def post(request):
         data_user = request.body
         try:
             test_service.test(data_user)

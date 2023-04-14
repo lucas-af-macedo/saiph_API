@@ -23,13 +23,16 @@ class Sessions(models.Model):
 class Document(models.Model):
     id = models.AutoField(primary_key=True)
     document = models.CharField(max_length=14, blank=False, null=False)
-    last_ncu = models.CharField(max_length=254)
+    last_ncu = models.CharField(max_length=254, default='0')
+    last_batch = models.CharField(max_length=254, default='1')
+    last_request_nfe = models.DateTimeField()
 
     class Meta:
         default_related_name = 'document'
 class Certificate(models.Model):
     id = models.AutoField(primary_key=True)
     certificate = models.BinaryField(null=False)
+    uf = models.CharField(max_length=2, blank=False, null=False)
     code = models.CharField(max_length=30, blank=False, null=False)
     password = models.CharField(max_length=254, blank=False, null=False)
     expiration = models.DateTimeField(null=False)
@@ -74,6 +77,7 @@ class NFE(models.Model):
     nfe = models.BinaryField()
     answered = models.BooleanField(default=False)
     operation_science = models.BooleanField(default=False)
+    operation_science_date = models.DateTimeField()
     answer = models.CharField(max_length=254)
     class Meta:
         default_related_name = 'nfe'

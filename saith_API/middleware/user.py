@@ -46,3 +46,4 @@ class SignUpMiddleware:
                 return JsonResponse({'error': str(e)}, status=400)
         response = self.get_response(request)
         return response
+    
