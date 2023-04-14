@@ -1,7 +1,6 @@
 from ..repository import certificate_repository, document_repository
 from datetime import datetime, timezone
 import OpenSSL.crypto
-import base64
 
 def insert_certificate(certificate, password, user_id):
     cert = get_certificate_data_or_fail(certificate, password)
@@ -9,12 +8,18 @@ def insert_certificate(certificate, password, user_id):
     subject = cert.get_subject()
     expiration = datetime.strptime(cert.get_notAfter().decode(), '%Y%m%d%H%M%SZ')
     code = cert.get_serial_number()
-    document_number = subject.commonName.split(':')[-1]
+    common_name = subject.commonName.split(':')
+    document_number = common_name[-1]
+    if len(document_number) == 14:
+        document_type = 'CNPJ'
+    else:
+        document_type = 'CPF'
+    name = common_name[0]
     uf = subject.stateOrProvinceName
     uf_number = get_uf_number(uf)
 
     verify_expiration(expiration)
-    document_id = verify_document_exist(document_number) 
+    document_id = verify_document_exist(document_number, name, document_type) 
 
     certificate_result = certificate_repository.get_certificate_with_code(code)
     user_certificate = certificate_repository.get_user_certificate_document(user_id=user_id, document_id=document_id)
@@ -38,6 +43,34 @@ def insert_certificate(certificate, password, user_id):
         certificate_repository.insert_user_document_valid(user_id=user_id, document_id=document_id)
 
     return None
+
+
+def get_certificate_data_or_fail(certificate, password):
+    try:
+        pfx = OpenSSL.crypto.load_pkcs12(certificate, password)
+    except:
+        raise ValueError('The password of certificate dont match')
+    
+    return pfx.get_certificate()
+
+def verify_expiration(expiration):
+    now = datetime.today()
+    expired = expiration - now
+
+    if (expired.total_seconds() < 0):
+        raise ValueError('Certificate has expired!')
+    
+    return None
+
+def verify_document_exist(document_number, name, document_type):
+    document = document_repository.get_document(document_number)
+
+    if (not len(document)):
+        document_id = document_repository.insert_document(document_number, name, document_type)
+    else:
+        document_id = document[0].id
+
+    return document_id
 
 def get_uf_number(uf):
     if uf == 'AC':
@@ -96,32 +129,3 @@ def get_uf_number(uf):
         return '17'
     else:
         return '91'
-
-
-def get_certificate_data_or_fail(certificate, password):
-    try:
-        pfx = OpenSSL.crypto.load_pkcs12(certificate, password)
-    except:
-        raise ValueError('The password of certificate dont match')
-    
-    return pfx.get_certificate()
-
-
-def verify_expiration(expiration):
-    now = datetime.today()
-    expired = expiration - now
-
-    if (expired.total_seconds() < 0):
-        raise ValueError('Certificate has expired!')
-    
-    return None
-
-def verify_document_exist(document_number):
-    document = document_repository.get_document(document_number)
-
-    if (not len(document)):
-        document_id = document_repository.insert_document(document_number)
-    else:
-        document_id = document[0].id
-
-    return document_id

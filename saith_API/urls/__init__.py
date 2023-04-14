@@ -10,7 +10,7 @@ urlpatterns = [
     path('', include(user_urlpatterns)),
     path('auth/', include(certificate_urlpatterns)),
     path('auth/', include(tests_urlpatterns)),
-    path('auth', include(documents_urlpatterns)),
+    path('auth/', include(documents_urlpatterns)),
     path('auth/', include(events_urlpatterns)),
     path('auth/', include(nfe_urlpatterns)),
 ]

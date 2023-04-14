@@ -22,8 +22,10 @@ class Sessions(models.Model):
 
 class Document(models.Model):
     id = models.AutoField(primary_key=True)
-    document = models.CharField(max_length=14, blank=False, null=False)
-    last_ncu = models.CharField(max_length=254, default='0')
+    document_number = models.CharField(max_length=14, blank=False, null=False)
+    document_type = models.CharField(max_length=4, blank=False, null=False)
+    name = models.CharField(max_length=254, blank=False, null=False)
+    last_nsu = models.CharField(max_length=254, default='0')
     last_batch = models.CharField(max_length=254, default='1')
     last_request_nfe = models.DateTimeField()
 
