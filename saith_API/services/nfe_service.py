@@ -18,12 +18,26 @@ def get_nfes(user_id, user_documento_valid_id):
     return list_nfes
 
 def get_nfe(user_id, nfe_id):
+    nfe = get_nfe_or_fail(nfe_id)
+    get_user_document_valid_or_fail_with_document_id(nfe['document'], user_id)
+    
+    return nfe
+
+def get_nfe_or_fail(nfe_id):
     nfe = nfe_repository.get_nfe(nfe_id)
-    user_document = get_user_document_valid_or_fail(user_id)
+    if not len(nfe):
+        raise ValueError('NFe not found!')
+    return nfe[0]
 
 def get_user_document_valid_or_fail(user_documento_valid_id, user_id):
     user_document = nfe_repository.get_user_document_valid(user_documento_valid_id, user_id)
     if not len(user_document):
+        raise ValueError('Document doesnt exist or user dont has access')
+    return user_document[0]
+
+def get_user_document_valid_or_fail_with_document_id(documento_id, user_id):
+    user_document = nfe_repository.get_user_document_valid_by_document(documento_id, user_id)
+    if not len(user_document) or not user_document[0]['is_valid']:
         raise ValueError('Document doesnt exist or user dont has access')
     return user_document[0]
 
