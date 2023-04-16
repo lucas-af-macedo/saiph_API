@@ -56,9 +56,9 @@ def get_certificate_data_or_fail(certificate, password):
 def verify_expiration(expiration):
     now = datetime.today()
     expired = expiration - now
-
+    
     if (expired.total_seconds() < 0):
-        raise ValueError('Certificate has expired!')
+        raise ValueError('Certificate expired!')
     
     return None
 

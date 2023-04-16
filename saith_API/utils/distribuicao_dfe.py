@@ -37,7 +37,7 @@ def dist_dfe_xml(NSU, document_number, state_number, search_type):
     else:
         document = etree.SubElement(dist_dfe, 'CNPJ')
     document.text = document_number
-    if search_type == 'ultimo_NSU':
+    if search_type == 'last_NSU':
         dist_nsu = etree.SubElement(dist_dfe, 'distNSU')
         ult_nsu = etree.SubElement(dist_nsu, 'ultNSU')
         ult_nsu.text = NSU

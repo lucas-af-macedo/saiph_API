@@ -79,7 +79,7 @@ class NFE(models.Model):
     nfe = models.BinaryField()
     answered = models.BooleanField(default=False)
     operation_science = models.BooleanField(default=False)
-    operation_science_date = models.DateTimeField()
+    operation_science_date = models.DateTimeField(null=True)
     answer = models.CharField(max_length=254)
     class Meta:
         default_related_name = 'nfe'

@@ -36,6 +36,7 @@ def post_distribuicao_dfe(certificate, NSU, document_number, state_number, searc
 
     soap_envelope = distribuicao_dfe(NSU, document_number, state_number, search_type)
     body = etree.tostring(soap_envelope, xml_declaration=True, encoding='UTF-8')
+    print(etree.tostring(soap_envelope, xml_declaration=True, pretty_print=True, encoding='UTF-8').decode())
 
     environment = os.getenv('ENVIRONMENT_TYPE')
     if environment == '2':
@@ -49,14 +50,17 @@ def post_distribuicao_dfe(certificate, NSU, document_number, state_number, searc
         return {'status': '', 'text': '', 'data': '', 'error': err}"""
     content = open('response38.xml', 'rb').read()
     data_bytes = BytesIO(content)
+    #data_bytes = BytesIO(response.content)
     root = etree.parse(data_bytes).getroot()
+    print(etree.tostring(root, xml_declaration=True, pretty_print=True, encoding='UTF-8').decode())
     data = get_response_data(root)
     status = root.findall(".//{http://www.portalfiscal.inf.br/nfe}cStat")[-1].text
     status_text = root.findall(".//{http://www.portalfiscal.inf.br/nfe}xMotivo")[-1].text
     date = root.find(".//{http://www.portalfiscal.inf.br/nfe}dhResp").text
-    #file = open('responses/%s.xml'%date, 'wb')
-    #file.write(response.content)
-    #file.close()
+    file = open('responses/%s-%s-%s.xml'%(status, status_text, date), 'wb')
+    data_file = etree.tostring(root, xml_declaration=True, pretty_print=True, encoding='UTF-8')
+    file.write(data_file)
+    file.close()
     return {'status': status, 'text': status_text, 'data': data, 'error': ''}
 
 def load_pkcs12(certificate):

@@ -1,4 +1,5 @@
 from ..models import Certificate, User_Certificate_Document, User_Document_Valid
+from ..serializers import certificate_serializer
 
 def get_certificate_with_code(code):
     certificate = Certificate.objects.filter(code=code)
@@ -34,3 +35,13 @@ def insert_user_document_valid(user_id, document_id):
     user_document_valid = User_Document_Valid.objects.create(user_id=user_id, document_id=document_id)
 
     return user_document_valid
+
+def get_certificate_by_id(id):
+    certificate = Certificate.objects.filter(id=id)[0]
+
+    return certificate
+
+def update_certificate_invalid(id):
+    Certificate.objects.filter(id=id).update(is_valid=False)
+
+    return None
