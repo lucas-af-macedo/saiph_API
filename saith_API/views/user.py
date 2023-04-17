@@ -12,7 +12,7 @@ class sign_in(APIView):
 
             return JsonResponse(user, status=200)
         except ValueError as err:
-            return HttpResponse(status=500)
+            return HttpResponse(err ,status=500)
 
 
 class sign_up(APIView):
@@ -24,5 +24,6 @@ class sign_up(APIView):
             
             return HttpResponse(status=201)
         except ValueError as err:
-            return HttpResponse(status=500)
+            print(err)
+            return HttpResponse(err ,status=500)
         

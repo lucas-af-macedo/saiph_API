@@ -27,7 +27,7 @@ def get_user(data_user):
 def sign_up(data_user):
     email = data_user['email']
     password = data_user['password']
-    confirm_password = data_user['confirm_password']
+    confirm_password = data_user['confirmPassword']
     name = data_user['name']
 
     if password != confirm_password:

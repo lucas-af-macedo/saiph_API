@@ -34,7 +34,7 @@ class SignUpMiddleware:
         if request.path == '/sign-up/':
             try:
                 data = JSONParser().parse(request)
-                allowed_fields = set(['name', 'email', 'password', 'confirm_password'])
+                allowed_fields = set(['name', 'email', 'password', 'confirmPassword'])
                 received_fields = set(data.keys())
                 invalid_fields = received_fields - allowed_fields
                 if invalid_fields:
